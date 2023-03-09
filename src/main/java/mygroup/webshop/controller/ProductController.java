@@ -1,13 +1,11 @@
 package mygroup.webshop.controller;
 
+import mygroup.webshop.model.ProductRequest;
 import mygroup.webshop.model.ProductResponse;
 import mygroup.webshop.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,5 +26,16 @@ public class ProductController {
         Optional<ProductResponse> product = repository.findById(id);
         return product.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/products/{id}")
+    public ResponseEntity<ProductResponse> deleteProductById(@PathVariable String id) {
+        repository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/products")
+    public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest request) {
+        return repository.save(request);
     }
 }

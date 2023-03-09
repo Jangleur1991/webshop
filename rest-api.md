@@ -13,3 +13,11 @@ GET /api/products
 GET /api/products/{id}
 * load all products with tag  
 GET /api/products?tag={tag}
+* delete a product  
+DELETE /api/products/{id}
+* create a prodcut  
+POST /api/products
+* load all customers  
+GET /api/customers
+* create a customer  
+POST /api/customers
