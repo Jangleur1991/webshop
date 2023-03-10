@@ -21,3 +21,7 @@ POST /api/products
 GET /api/customers
 * create a customer  
 POST /api/customers
+* create an order  
+POST /api/orders
+* create/add an order position to an order  
+POST /api/orders/{id}/positions
