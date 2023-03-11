@@ -1,13 +1,16 @@
 package mygroup.webshop.controller;
 
+import lombok.Getter;
+import mygroup.webshop.model.OrderPositionRequest;
+import mygroup.webshop.model.OrderPositionResponse;
 import mygroup.webshop.model.OrderRequest;
 import mygroup.webshop.model.OrderResponse;
 import mygroup.webshop.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class OrderController {
@@ -20,5 +23,17 @@ public class OrderController {
         return orderService.createOrder(request);
     }
 
+    @PostMapping("/orders/{id}/positions")
+    public ResponseEntity<OrderPositionResponse> createOrderPosition(
+            @PathVariable(name = "id") String orderId,
+            @RequestBody OrderPositionRequest request
+            ) throws Exception {
+        return orderService.createPositionForOrder(orderId, request);
+    }
+
+    @GetMapping("/orders")
+    public List<OrderResponse> getAllOrders() {
+        return orderService.findAll();
+    }
 
 }

@@ -16,5 +16,5 @@ public class OrderResponse {
 
     private OrderStatus orderStatus;
 
-    private List<OrderPosition> orderPositions;
+    private List<OrderPositionResponse> orderPositions;
 }
