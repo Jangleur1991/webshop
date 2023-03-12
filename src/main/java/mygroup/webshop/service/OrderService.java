@@ -1,36 +1,50 @@
 package mygroup.webshop.service;
 
+import lombok.AllArgsConstructor;
 import mygroup.webshop.model.*;
 import mygroup.webshop.repository.CustomerRepository;
 import mygroup.webshop.repository.OrderPositionRepository;
 import mygroup.webshop.repository.OrderRepository;
 import mygroup.webshop.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 
 @Service
+@AllArgsConstructor
 public class OrderService {
 
-    @Autowired
     private CustomerRepository customerRepository;
-    @Autowired
     private OrderRepository orderRepository;
-    @Autowired
     private ProductRepository productRepository;
-
-    @Autowired
     private OrderPositionRepository orderPositionRepository;
 
-    public ResponseEntity<OrderResponse> createOrder(OrderRequest request) throws Exception {
-        customerRepository.findById(request.getCustomerId())
-                .orElseThrow(() -> new Exception("Customer not found!"));
-        return orderRepository.save(request);
+    public CreateOrderResult createOrder(OrderRequest request) throws Exception {
+        Optional<CustomerResponse> customer = customerRepository.findById(request.getCustomerId());
+        return customer.isEmpty()
+                ? errorResult()
+                : nonErrorResult(request);
+//        customerRepository.findById(request.getCustomerId())
+//                .orElseThrow(() -> new Exception("Customer not found!"));
+//        return orderRepository.save(request);
+    }
+
+    private CreateOrderResult nonErrorResult(OrderRequest request) {
+        return new CreateOrderResult(
+                orderRepository.save(request),
+                Collections.emptyList(),
+                HttpStatus.OK
+        );
+    }
+
+    private CreateOrderResult errorResult() {
+        ErrorResponse errorResponse = new ErrorResponse("Customer not found!");
+        return new CreateOrderResult(null, List.of(errorResponse), HttpStatus.BAD_REQUEST);
     }
 
     public ResponseEntity<OrderPositionResponse> createPositionForOrder(

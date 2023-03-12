@@ -14,8 +14,10 @@ import java.util.UUID;
 
 @Repository
 public class OrderRepository {
+
     private final List<OrderResponse> orders = new ArrayList<>();
-    public ResponseEntity<OrderResponse> save(OrderRequest request) {
+
+    public OrderResponse save(OrderRequest request) {
         OrderResponse orderResponse = new OrderResponse(
                 UUID.randomUUID().toString(),
                 request.getCustomerId(),
@@ -24,7 +26,7 @@ public class OrderRepository {
                 new ArrayList<>()
         );
         orders.add(orderResponse);
-        return ResponseEntity.ok(orderResponse);
+        return orderResponse;
     }
 
     public Optional<OrderResponse> findById(String orderId) {

@@ -1,10 +1,6 @@
 package mygroup.webshop.controller;
 
-import lombok.Getter;
-import mygroup.webshop.model.OrderPositionRequest;
-import mygroup.webshop.model.OrderPositionResponse;
-import mygroup.webshop.model.OrderRequest;
-import mygroup.webshop.model.OrderResponse;
+import mygroup.webshop.model.*;
 import mygroup.webshop.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +15,11 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/orders")
-    public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderRequest request) throws Exception {
-        return orderService.createOrder(request);
+    public ResponseEntity<?> createOrder(@RequestBody OrderRequest request) throws Exception {
+        CreateOrderResult orderResult = orderService.createOrder(request);
+        return (null != orderResult.getResult())
+                ? ResponseEntity.ok(orderResult.getResult())
+                : ResponseEntity.status(orderResult.getCode()).body(orderResult.getErrors());
     }
 
     @PostMapping("/orders/{id}/positions")
