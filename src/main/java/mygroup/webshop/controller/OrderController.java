@@ -15,11 +15,8 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/orders")
-    public ResponseEntity<?> createOrder(@RequestBody OrderRequest request) throws Exception {
-        CreateOrderResult orderResult = orderService.createOrder(request);
-        return (null != orderResult.getResult())
-                ? ResponseEntity.ok(orderResult.getResult())
-                : ResponseEntity.status(orderResult.getCode()).body(orderResult.getErrors());
+    public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderRequest request) throws Exception {
+        return ResponseEntity.ok(orderService.createOrder(request));
     }
 
     @PostMapping("/orders/{id}/positions")
