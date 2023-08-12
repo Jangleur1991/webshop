@@ -7,6 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class OrderPositionResponse {
     private String id;
+    private String orderId;
     private String productId;
-    private String quantity;
+    private Integer quantity;
 }

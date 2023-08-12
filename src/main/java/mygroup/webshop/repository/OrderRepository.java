@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Repository
 public class OrderRepository {
@@ -37,5 +38,13 @@ public class OrderRepository {
 
     public List<OrderResponse> findAll() {
         return orders;
+    }
+
+    public List<OrderResponse> findAllByCustomerIdWhereStatusNew(String customerId) {
+        return orders.stream()
+                .filter(order -> customerId.equals(order.getCustomerId()))
+                .filter(order -> OrderStatus.NEW == order.getOrderStatus())
+                .collect(Collectors.toList());
+
     }
 }

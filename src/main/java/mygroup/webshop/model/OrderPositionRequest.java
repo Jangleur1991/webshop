@@ -5,5 +5,5 @@ import lombok.Getter;
 @Getter
 public class OrderPositionRequest {
     private String productId;
-    private String quantity;
+    private Integer quantity;
 }

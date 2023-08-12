@@ -40,7 +40,7 @@ public class OrderService {
         productRepository.findById(request.getProductId())
                 .orElseThrow(() -> new Exception("Product not found!"));
 
-        OrderPositionResponse orderPositionResponse = orderPositionRepository.save(request);
+        OrderPositionResponse orderPositionResponse = orderPositionRepository.save(orderId, request);
         orderResponse.getOrderPositions().add(orderPositionResponse);
         return ResponseEntity.ok(orderPositionResponse);
     }
