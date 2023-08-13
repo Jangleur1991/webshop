@@ -29,6 +29,17 @@ public class ShoppingCartService {
 
         List<OrderPositionResponse> orderPositions = orderPositionRepository.findAllByOrdersId(orderIds);
 
+        long deliverCost = 500L;
+        long totalAmount = calculateSumForCart(orderPositions, deliverCost);
+
+        return new ShoppingCartResponse(customerId,
+                orderPositions,
+                totalAmount,
+                deliverCost,
+                "STANDARD");
+    }
+
+    public Long calculateSumForCart(List<OrderPositionResponse> orderPositions, long deliverCost) {
         int positionSum = orderPositions.stream().mapToInt(position -> {
             ProductResponse product = productRepository //
                     .findById(position.getProductId()) //
@@ -36,13 +47,6 @@ public class ShoppingCartService {
             return product.getPriceInCent() * position.getQuantity();
         }).sum();
 
-        long deliverCost = 500L;
-        long totalAmount = positionSum+deliverCost;
-
-        return new ShoppingCartResponse(customerId,
-                orderPositions,
-                totalAmount,
-                deliverCost,
-                "STANDARD");
+        return positionSum+deliverCost;
     }
 }

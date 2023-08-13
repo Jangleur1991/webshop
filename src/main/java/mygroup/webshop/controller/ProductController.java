@@ -36,6 +36,6 @@ public class ProductController {
 
     @PostMapping("/products")
     public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest request) {
-        return repository.save(request);
+        return ResponseEntity.ok(repository.save(request));
     }
 }

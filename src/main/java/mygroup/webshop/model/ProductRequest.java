@@ -1,10 +1,13 @@
 package mygroup.webshop.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 
 import java.util.List;
 
-@Getter
+@AllArgsConstructor
+@Data
 public class ProductRequest {
     private String name;
     private String description;

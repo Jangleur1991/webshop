@@ -46,7 +46,7 @@ public class ProductRepository {
                 .collect(Collectors.toList());
     }
 
-    public ResponseEntity<ProductResponse> save(ProductRequest request) {
+    public ProductResponse save(ProductRequest request) {
         ProductResponse productResponse = new ProductResponse(
                 UUID.randomUUID().toString(),
                 request.getName(),
@@ -55,6 +55,6 @@ public class ProductRepository {
                 request.getTags()
         );
         products.add(productResponse);
-        return ResponseEntity.ok(productResponse);
+        return productResponse;
     }
 }
