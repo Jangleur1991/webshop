@@ -41,11 +41,19 @@ public class OrderService {
                 .orElseThrow(() -> new Exception("Product not found!"));
 
         OrderPositionResponse orderPositionResponse = orderPositionRepository.save(orderId, request);
-        orderResponse.getOrderPositions().add(orderPositionResponse);
+
+        addOrderPosition(orderResponse, orderPositionResponse);
+
         return ResponseEntity.ok(orderPositionResponse);
     }
 
     public List<OrderResponse> findAll() {
         return orderRepository.findAll();
+    }
+
+    private void addOrderPosition(OrderResponse order, OrderPositionResponse orderPosition) {
+        List<OrderPositionResponse> orderPositions = order.getOrderPositions();
+        orderPositions.removeIf(position -> position.getProductId().equals(orderPosition.getProductId()));
+        orderPositions.add(orderPosition);
     }
 }

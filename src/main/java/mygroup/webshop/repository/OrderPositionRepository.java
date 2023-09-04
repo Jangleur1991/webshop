@@ -4,27 +4,28 @@ import mygroup.webshop.model.OrderPositionRequest;
 import mygroup.webshop.model.OrderPositionResponse;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
 public class OrderPositionRepository {
-    List<OrderPositionResponse> positions = new ArrayList<>();
+
+    private Map<String, OrderPositionResponse> orderPositionResponseMap = new HashMap<>();
+
     public OrderPositionResponse save(String orderId, OrderPositionRequest request) {
-        OrderPositionResponse orderPositionResponse = new OrderPositionResponse(
-                UUID.randomUUID().toString(),
-                orderId,
-                request.getProductId(),
-                request.getQuantity()
-        );
-        positions.add(orderPositionResponse);
-        return orderPositionResponse;
+        String key = orderId + "_" + request.getProductId();
+        return orderPositionResponseMap.compute(key, (k, orderPos) -> //
+                new OrderPositionResponse(
+                        (null != orderPos) ? orderPos.getId() : UUID.randomUUID().toString(),
+                        orderId,
+                        request.getProductId(),
+                        (null != orderPos) ? orderPos.getQuantity() + request.getQuantity() : request.getQuantity()
+                ));
     }
 
     public List<OrderPositionResponse> findAllByOrdersId(List<String> orderIds) {
-        return positions.stream().filter(position -> orderIds.contains(position.getOrderId()))
+        return orderPositionResponseMap.values().stream()
+                .filter(position -> orderIds.contains(position.getOrderId()))
                 .collect(Collectors.toList());
     }
 }
